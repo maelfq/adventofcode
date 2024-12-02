@@ -1,4 +1,4 @@
-package org.example;
+package day1;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
+public class Day1 {
     public static void main(String[] args) {
         try {
             int[][] columnOfFileAsArray = getColumnsOfFileAsArray();
@@ -67,7 +67,7 @@ public class Main {
 
     public static int[][] getColumnsOfFileAsArray() throws IOException {
         String fileName = "day1-input.txt";
-        ClassLoader classLoader = Main.class.getClassLoader();
+        ClassLoader classLoader = Day1.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(fileName);
         String data = readFromInputStream(inputStream);
         String[] lines = data.split("\n");
