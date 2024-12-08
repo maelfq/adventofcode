@@ -11,17 +11,24 @@ import static common.CommonFileUtils.readFromInputStream;
 
 public class Day3 {
     public static void main(String[] args) {
+
         try {
             System.out.println("Result: " + retrieveMultiplicationsSum());
+            System.out.println("Result with disabled parts: " + retrieveMultiplicationsSumWithDisabledParts());
         }
         catch(Exception e) {
-            // do nothing
             System.out.println(Arrays.toString(e.getStackTrace()));
         }
     }
 
     public static long retrieveMultiplicationsSum() throws IOException {
         ArrayList<ArrayList<String>> input = parseCorruptedInput();
+        long sum = computeSumOfMultiplications(input);
+        return sum;
+    }
+
+    public static long retrieveMultiplicationsSumWithDisabledParts() throws IOException {
+        ArrayList<ArrayList<String>> input = parseCorruptedInputWithDisabledParts();
         long sum = computeSumOfMultiplications(input);
         return sum;
     }
@@ -78,5 +85,46 @@ public class Day3 {
             corruptedInput.add(matches);
         }
         return corruptedInput;
+    }
+
+    public static ArrayList<ArrayList<String>> parseCorruptedInputWithDisabledParts() throws IOException {
+        String fileName = "day3-input.txt";
+        ClassLoader classLoader = Day3.class.getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream(fileName);
+        String data = readFromInputStream(inputStream);
+        String[] lines = data.split("\n");
+
+        ArrayList<ArrayList<String>> corruptedInput = new ArrayList<>();
+        for(String line : lines) {
+
+            ArrayList<String> enabledParts = getEnabledParts(line);
+
+            corruptedInput.add(enabledParts);
+        }
+        return corruptedInput;
+    }
+
+    private static ArrayList<String> getEnabledParts(String line) {
+        ArrayList<String> enabledParts = new ArrayList<>();
+        Pattern pattern = Pattern.compile("mul\\([0-9]{1,3},[0-9]{1,3}\\)|do\\(\\)|don't\\(\\)", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(line);
+
+        boolean isEnabled = true;
+        while (matcher.find()) {
+            String match = matcher.group();
+            if (match.equals("do()")) {
+                isEnabled = true;
+            }
+            else if (match.equals("don't()")) {
+                isEnabled = false;
+            }
+            else {
+                if(isEnabled) {
+                    enabledParts.add(match);
+                }
+            }
+        }
+
+        return enabledParts;
     }
 }
