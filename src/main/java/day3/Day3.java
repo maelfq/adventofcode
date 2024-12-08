@@ -13,7 +13,7 @@ public class Day3 {
     public static void main(String[] args) {
 
         try {
-            //System.out.println("Result: " + retrieveMultiplicationsSum());
+            System.out.println("Result: " + retrieveMultiplicationsSum());
             System.out.println("Result with disabled parts: " + retrieveMultiplicationsSumWithDisabledParts());
         } catch (Exception e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
@@ -21,32 +21,18 @@ public class Day3 {
     }
 
     public static long retrieveMultiplicationsSum() throws IOException {
-        ArrayList<ArrayList<String>> input = parseCorruptedInput();
+        ArrayList<String> input = parseCorruptedInput();
         long sum = computeSumOfMultiplications(input);
         return sum;
     }
 
     public static long retrieveMultiplicationsSumWithDisabledParts() throws IOException {
         ArrayList<String> input = parseCorruptedInputWithDisabledParts();
-        long sum = computeSumOfMultiplications1DArray(input);
+        long sum = computeSumOfMultiplications(input);
         return sum;
     }
 
-    public static long computeSumOfMultiplications(ArrayList<ArrayList<String>> input) {
-        long sum = 0;
-        for (ArrayList<String> line : input) {
-            long lineSum = 0;
-            for (String multiplication : line) {
-                long[] numbers = parseMultiplicationInput(multiplication);
-                long multiplicationResult = numbers[0] * numbers[1];
-                lineSum += multiplicationResult;
-            }
-            sum += lineSum;
-        }
-        return sum;
-    }
-
-    public static long computeSumOfMultiplications1DArray(ArrayList<String> input) {
+    public static long computeSumOfMultiplications(ArrayList<String> input) {
         long sum = 0;
         for (String multiplication : input) {
             long[] numbers = parseMultiplicationInput(multiplication);
@@ -74,26 +60,15 @@ public class Day3 {
         return input;
     }
 
-    public static ArrayList<ArrayList<String>> parseCorruptedInput() throws IOException {
+    public static ArrayList<String> parseCorruptedInput() throws IOException {
         String fileName = "day3-input.txt";
         ClassLoader classLoader = Day3.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(fileName);
         String data = readFromInputStream(inputStream);
-        String[] lines = data.split("\n");
 
-        ArrayList<ArrayList<String>> corruptedInput = new ArrayList<>();
-        for (String line : lines) {
-            Pattern pattern = Pattern.compile("mul\\([0-9]{1,3},[0-9]{1,3}\\)", Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(line);
+        ArrayList<String> multiplications = getMultiplications(data);
 
-            ArrayList<String> matches = new ArrayList<>();
-            while (matcher.find()) {
-                matches.add(matcher.group());
-            }
-
-            corruptedInput.add(matches);
-        }
-        return corruptedInput;
+        return multiplications;
     }
 
     public static ArrayList<String> parseCorruptedInputWithDisabledParts() throws IOException {
@@ -102,8 +77,19 @@ public class Day3 {
         InputStream inputStream = classLoader.getResourceAsStream(fileName);
         String data = readFromInputStream(inputStream);
 
-        ArrayList<String> corruptedInput = getEnabledParts(data);
-        return corruptedInput;
+        ArrayList<String> correctedInput= getEnabledParts(data);
+        return correctedInput;
+    }
+
+    private static ArrayList<String> getMultiplications(String input) {
+        Pattern pattern = Pattern.compile("mul\\([0-9]{1,3},[0-9]{1,3}\\)", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(input);
+
+        ArrayList<String> matches = new ArrayList<>();
+        while (matcher.find()) {
+            matches.add(matcher.group());
+        }
+        return matches;
     }
 
     private static ArrayList<String> getEnabledParts(String input) {
