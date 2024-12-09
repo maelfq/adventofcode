@@ -3,8 +3,6 @@ package day4;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.StringJoiner;
 
 import static common.CommonFileUtils.readFromInputStream;
 
@@ -39,11 +37,15 @@ public class Day4 {
         int yLength = input.size();
         int xLength = input.get(lineIndex).size();
         int countOfPositionXY = 0;
+        int numberOfLettersRequiredToCompleteWord = word.length() - 1;
+        int xIndexOfLastLetter;
+        int yIndexOfLastLetter;
 
         // X AXIS
 
         // To the left
-        if ((characterIndex - word.length()) > 0) {
+        xIndexOfLastLetter = characterIndex - numberOfLettersRequiredToCompleteWord;
+        if (xIndexOfLastLetter >= 0) {
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < word.length(); i++) {
                 stringBuilder.append(input.get(lineIndex).get(characterIndex - i));
@@ -55,7 +57,8 @@ public class Day4 {
         }
 
         // To the right
-        if ((characterIndex + word.length()) < xLength) {
+        xIndexOfLastLetter = characterIndex + numberOfLettersRequiredToCompleteWord;
+        if (xIndexOfLastLetter < xLength) {
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < word.length(); i++) {
                 stringBuilder.append(input.get(lineIndex).get(characterIndex + i));
@@ -69,7 +72,8 @@ public class Day4 {
         // Y AXIS
 
         // To the top
-        if ((lineIndex - word.length()) > 0) {
+        yIndexOfLastLetter = lineIndex - numberOfLettersRequiredToCompleteWord;
+        if (yIndexOfLastLetter >= 0) {
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < word.length(); i++) {
                 stringBuilder.append(input.get(lineIndex - i).get(characterIndex));
@@ -81,7 +85,8 @@ public class Day4 {
         }
 
         // To the bottom
-        if ((lineIndex + word.length()) < yLength) {
+        yIndexOfLastLetter = lineIndex + numberOfLettersRequiredToCompleteWord;
+        if (yIndexOfLastLetter < yLength) {
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < word.length(); i++) {
                 stringBuilder.append(input.get(lineIndex + i).get(characterIndex));
@@ -95,7 +100,10 @@ public class Day4 {
         // DIAGONALS
 
         // To the left up
-        if ((characterIndex - word.length()) > 0 && (lineIndex - word.length()) > 0) {
+        xIndexOfLastLetter = characterIndex - numberOfLettersRequiredToCompleteWord;
+        yIndexOfLastLetter = lineIndex - numberOfLettersRequiredToCompleteWord;
+
+        if (xIndexOfLastLetter >= 0 && yIndexOfLastLetter >= 0) {
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < word.length(); i++) {
                 stringBuilder.append(input.get(lineIndex - i).get(characterIndex - i));
@@ -107,7 +115,10 @@ public class Day4 {
         }
 
         // To the left down
-        if ((characterIndex - word.length()) > 0 && (lineIndex + word.length()) < yLength) {
+        xIndexOfLastLetter = characterIndex - numberOfLettersRequiredToCompleteWord;
+        yIndexOfLastLetter = lineIndex + numberOfLettersRequiredToCompleteWord;
+
+        if (xIndexOfLastLetter >= 0 && yIndexOfLastLetter < yLength) {
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < word.length(); i++) {
                 stringBuilder.append(input.get(lineIndex + i).get(characterIndex - i));
@@ -119,7 +130,10 @@ public class Day4 {
         }
 
         // To the right up
-        if ((characterIndex + word.length()) < xLength && (lineIndex - word.length()) > 0) {
+        xIndexOfLastLetter = characterIndex + numberOfLettersRequiredToCompleteWord;
+        yIndexOfLastLetter = lineIndex - numberOfLettersRequiredToCompleteWord;
+
+        if (xIndexOfLastLetter < xLength && yIndexOfLastLetter >= 0) {
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < word.length(); i++) {
                 stringBuilder.append(input.get(lineIndex - i).get(characterIndex + i));
@@ -131,7 +145,10 @@ public class Day4 {
         }
 
         // To the right down
-        if ((characterIndex + word.length()) < xLength && (lineIndex + word.length()) < yLength) {
+        xIndexOfLastLetter = characterIndex + numberOfLettersRequiredToCompleteWord;
+        yIndexOfLastLetter = lineIndex + numberOfLettersRequiredToCompleteWord;
+
+        if (xIndexOfLastLetter < xLength && yIndexOfLastLetter < yLength) {
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < word.length(); i++) {
                 stringBuilder.append(input.get(lineIndex + i).get(characterIndex + i));
@@ -146,7 +163,7 @@ public class Day4 {
     }
 
     public static ArrayList<ArrayList<String>> parseXmasInput() throws IOException {
-        String fileName = "day4-small-input.txt";
+        String fileName = "day4-input.txt";
         ClassLoader classLoader = Day4.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(fileName);
         String data = readFromInputStream(inputStream);
