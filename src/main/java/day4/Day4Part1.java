@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import static common.CommonFileUtils.readFromInputStream;
 
-public class Day4 {
+public class Day4Part1 {
 
     public static void main(String[] args) throws IOException {
         System.out.println("Count of XMAS words: " + retrieveXmasCount());
@@ -164,7 +164,7 @@ public class Day4 {
 
     public static ArrayList<ArrayList<String>> parseXmasInput() throws IOException {
         String fileName = "day4-input.txt";
-        ClassLoader classLoader = Day4.class.getClassLoader();
+        ClassLoader classLoader = Day4Part1.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(fileName);
         String data = readFromInputStream(inputStream);
         String[] lines = data.split("\n");
